@@ -1,0 +1,27 @@
+name: Manual Approval Workflow
+
+on:
+  workflow_dispatch:  # Triggered manually
+
+jobs:
+  approval:
+    runs-on: ubuntu-latest
+    environment:
+      name: production  # Reference the environment where manual approval is required
+      url: https://example.com  # Optional: You can add an environment URL if needed
+
+    steps:
+      - name: Wait for approval
+        run: |
+          echo "Waiting for manual approval..."
+          
+      - name: Timeout the process after 2 minutes
+        if: success()  # Proceed only if the manual approval is successful
+        run: |
+          echo "Starting process..."
+          # Simulate long-running process (replace with your actual command)
+          timeout 2m bash -c "echo 'Running process...'; sleep 3m; echo 'Process completed'" || echo "Process timed out"
+
+      - name: Final Status
+        run: |
+          echo "Workflow finished."
